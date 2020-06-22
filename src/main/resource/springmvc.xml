@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       https://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!--声明组件扫描器：@Controller-->
+    <context:component-scan base-package="controller"/>
+    <!--组件扫描器：@ControllerAdvice-->
+    <context:component-scan base-package="handler"/>
+    <!--使用注解驱动-->
+    <mvc:annotation-driven/>
+    <!--声明视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+    <!--静态资源拦截(需要配合注解驱动使用和@RequestMapping冲突)-->
+    <!--<mvc:default-servlet-handler/>-->
+    <!--静态资源拦截(需要配合注解驱动使用和@RequestMapping冲突)-->
+    <mvc:resources mapping="/static/**" location="/static/"/>
+    <mvc:resources mapping="/webjars/**" location="/webjars/"/>
+
+    <!--声明拦截器-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="handler.UserInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="handler.UserInterceptor02" />
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+</beans>
